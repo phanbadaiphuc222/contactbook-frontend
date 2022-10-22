@@ -5,7 +5,7 @@ const routes = [
      {
           path : '/',
           name : 'contactbook',
-          component: ContactBook,
+          component: () => import('@/views/NotFound.vue'),
      },
 ];
 
