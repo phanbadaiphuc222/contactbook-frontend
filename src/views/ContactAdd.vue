@@ -3,11 +3,10 @@
         v-if="contact"
         class="page"
     >
-        <h4>Hiệu chỉnh Liên hệ</h4>
+        <h4>Thêm Liên hệ</h4>
         <ContactForm
             :contact="contact"
-            @submit:contact="onUpdateContact"
-            @delete:contact="onDeleteContact"
+            @submit:contact="onCreateContact"
         />
         <p>{{ message }}</p>
     </div>
@@ -26,7 +25,13 @@ export default {
     },
     data() {
         return {
-            contact: null,
+            contact: {
+                name: '',
+                email: '',
+                address: '',
+                phone: '',
+                favorite: 0
+            },
             message: '',
         };
     },
@@ -47,29 +52,24 @@ export default {
             }
         },
 
-        async onUpdateContact(contact) {
+        async onCreateContact(contact) {
             try {
-                await contactService.update(contact.id, contact);
-                this.message = 'Liên hệ được cập nhật thành công';
+                await contactService.create(contact);
+                this.message = 'Liên hệ được thêm thành công';
             } catch(error) {
                 console.log(error);
-            }
-        },
-
-        async onDeleteContact(id) {
-            if (confirm('Bạn muốn xóa Liên hệ này')) {
-                try {
-                    await contactService.delete(id);
-                    this.$router.push({ name: 'contactbook' });
-                } catch(error) {
-                    console.log(error);
-                }
             }
         },
     },
 
     created() {
-        this.getContact(this.contactId);
+        this.contact = {
+            name : '',
+            email : '',
+            address : '',
+            phone : '',
+            favorite : null
+        };
         this.message = '';
     },
 };

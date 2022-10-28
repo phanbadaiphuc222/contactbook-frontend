@@ -21,7 +21,7 @@
                 class="form-control"
                 v-model="contactLocal.email"
             />
-            <ErrorMessage name="email" class="erro-feedback" />
+            <ErrorMessage name="email" class="error-feedback" />
         </div>
         <div class="form-group">
             <label for="address">Địa chỉ</label>
@@ -30,6 +30,17 @@
                 type="text"
                 class="form-control"
                 v-model="contactLocal.address"
+            />
+            <ErrorMessage name="address" class="error-feedback"/>
+        </div>
+
+        <div class="form-group">
+            <label for="phone">Điện thoại</label>
+            <Field
+                name="phone"
+                type="tel"
+                class="form-control"
+                v-model="contactLocal.phone"
             />
             <ErrorMessage name="phone" class="error-feedback"/>
         </div>
@@ -47,14 +58,16 @@
         </div>
 
         <div class="form-group">
-            <button class="btn btn-primary">Lưu</button>
+            <button class="btn btn-primary">
+                <i class="fa-solid fa-floppy-disk"/> Lưu
+            </button>
             <button
                 v-if="contactLocal.id"
                 type="button"
                 class="ml-2 btn btn-danger"
                 @click="deleteContact"
             >
-                Xóa    
+            <i class="fas fa-trash"/> Xóa
             </button>
         </div>
     </Form>
@@ -75,6 +88,7 @@ export default {
     props: {
         contact: { type: Object, required: true }
     },
+
     data() {
         const contactFormSchema = yup.object().shape( {
             name: yup
@@ -84,18 +98,18 @@ export default {
                 .max(50, 'Tên có nhiều nhất 50 ký tự.'),
             email: yup
                 .string()
-                .email('E-meail không đúng .')
+                .email('E-mail không đúng.')
                 .max(50, 'E-mail tối đa 50 ký tự.'),
             address: yup.string().max(100, 'Địa chỉ tối đa 100 ký tự.'),
             phone: yup
                 .string()
                 .matches(
-                    /((09|03|07|08|05)+(\d{8}\b))/g,
+                    /((09|03|07|08|05)+(\d{8})\b)/g,
                     'Số điện thoại không hợp lệ.'
                 ),
         });
         return {
-            contactLocal: {...this.contact, favorit: !!this.contact.favorite},
+            contactLocal: { ...this.contact, favorite: !!this.contact.favorite },
             contactFormSchema,
         };
     },
@@ -112,4 +126,5 @@ export default {
 </script>
 
 <style scoped>
-@import '@/assets/form.css';</style>
+@import '@/assets/form.css';
+</style>
